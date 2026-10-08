@@ -1,10 +1,10 @@
 # Integration Guide
 
-`soroban-cost-linter` integrates directly into your workspace and CI/CD pipelines.
+**stellar-auditor** integrates directly into your workspace and CI/CD pipelines.
 
 ## Colour Control
 
-`soroban-cost-linter` forwards rustc's own coloured diagnostics to the terminal.
+**stellar-auditor** forwards rustc's own coloured diagnostics to the terminal.
 You can control this behaviour with the `--color` flag or the `NO_COLOR`
 environment variable.
 
@@ -21,8 +21,8 @@ value forces uncoloured output unless `--color` is passed explicitly.
 
 ## GitHub Actions
 
-The easiest way to add Soroban cost linting to your CI is the official composite
-action, `Tollcraft/soroban-cost-linter`. It installs the pinned Rust toolchain
+The easiest way to add Soroban cost linting to your CI is the composite
+action from this repository. It installs the pinned Rust toolchain
 and Dylint, builds the lint library and the `cargo cost-lint` CLI, and runs the
 linter against your contract, emitting GitHub workflow annotations for every
 finding. You do **not** need to hand-roll the toolchain install.
@@ -39,8 +39,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run soroban-cost-linter
-        uses: Tollcraft/soroban-cost-linter@v1
+      - name: Run stellar-auditor
+        uses: chindadi/stellar-auditor@v1
         with:
           config: budget.toml
 ```
@@ -69,8 +69,8 @@ The action accepts four inputs:
 For example, to lint a subdirectory with an extra `--format` override:
 
 ```yaml
-- name: Run soroban-cost-linter
-  uses: Tollcraft/soroban-cost-linter@v1
+- name: Run stellar-auditor
+  uses: chindadi/stellar-auditor@v1
   with:
     working-directory: contracts/my-account
     config: ../shared/budget.toml

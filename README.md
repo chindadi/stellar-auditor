@@ -1,21 +1,18 @@
 <div align="center">
-  <h1>soroban-cost-linter</h1>
-  <p><strong>The static analysis shield for Soroban smart contracts</strong></p>
+  <h1>stellar-auditor</h1>
+  <p><strong>Professional static analysis tool for Soroban smart contract cost optimization</strong></p>
   <p>
-    <img src="https://img.shields.io/github/actions/workflow/status/Tollcraft/soroban-cost-linter/lint.yml?branch=main" alt="CI Status" />
     <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License" />
   </p>
   <p>
-    <a href="https://tollcraft.gitbook.io/docs"><strong>Documentation</strong></a> ·
-    <a href="https://asciinema.org/a/1DpqHMqqOOXoZzMI"><strong>Demo</strong></a>
+    <a href="#documentation"><strong>Documentation</strong></a> ·
+    <a href="#getting-started"><strong>Getting Started</strong></a>
   </p>
 </div>
 
-> Part of the **[`Tollcraft`](https://github.com/Tollcraft)** initiative.
+**stellar-auditor** is a professional static analysis tool for Stellar smart contract developers. It analyzes your Rust code before compilation to detect input-independent, structurally expensive patterns that would unnecessarily drive up your Soroban resource metering and network fees.
 
-`soroban-cost-linter` is a static analysis tool for Stellar smart contract developers. It analyzes your Rust code before compilation to detect input-independent, structurally expensive patterns that would unnecessarily drive up your Soroban resource metering and network fees.
-
-This tool acts as the preventative shield in the Tollcraft two-tiered cost pipeline, pairing conceptually with our runtime test harness, [`soroban-budget-assert`](https://github.com/Tollcraft/soroban-budget-assert).
+This tool catches expensive anti-patterns before they make it to production, helping you write more efficient and cost-effective smart contracts.
 
 ## The Problem
 
@@ -46,12 +43,12 @@ The linter hooks into the Rust compiler's AST to catch specific Soroban anti-pat
 *   **[`duplicate_storage_key_construction`](docs/lints/duplicate_storage_key_construction.md):** Detects when the same storage key expression is constructed in two or more distinct function bodies, suggesting hoisting to a const or key enum.
 *   **[`val_conversion_chain`](docs/lints/val_conversion_chain.md):** Flags a chain of three or more `soroban_sdk` conversions (`into_val`/`try_into_val`/`from_val`/`try_from_val`) that bounce the same local value through `Val` across a `let` sequence, where converting directly to the needed shape would cost a single host call.
 
-## How it Fits into Tollcraft
+## How to Use This Tool
 
-`soroban-cost-linter` is designed to be Stage 1 of your cost-awareness pipeline:
+**stellar-auditor** is designed as Stage 1 of your cost-awareness pipeline:
 
-1.  **Linter (`soroban-cost-linter`):** Runs at compile-time (or via `cargo check`). Catches obvious, static structural flaws. 
-2.  **Assert (`soroban-budget-assert`):** Runs at test-time. Simulates your cleanly-linted code against the network to measure actual execution costs based on real runtime inputs.
+1.  **Linter (stellar-auditor):** Runs at compile-time (or via `cargo check`). Catches obvious, static structural flaws. 
+2.  **Runtime Testing:** Runs at test-time. Simulates your cleanly-linted code against the network to measure actual execution costs based on real runtime inputs.
 
 Both tools share configuration via a unified `budget.toml` file for thresholds and suppressions.
 
@@ -63,8 +60,8 @@ The fastest way to get a working environment is the pre-built container image, w
 the exact nightly toolchain, compiler components, and Dylint binaries installed — no manual setup required.
 
 ```bash
-docker pull ghcr.io/Tollcraft/soroban-cost-linter:latest
-docker run --rm -it -v "$(pwd)":/workspace ghcr.io/Tollcraft/soroban-cost-linter:latest bash
+docker pull ghcr.io/chindadi/stellar-auditor:latest
+docker run --rm -it -v "$(pwd)":/workspace ghcr.io/chindadi/stellar-auditor:latest bash
 # Inside the container:
 cargo test --workspace
 ```
@@ -103,7 +100,7 @@ Since `soroban-cost-linter` hooks directly into Rust's AST, it relies on [Dylint
 Add the linter to your Soroban workspace. **Ensure you are using the pinned nightly toolchain** (see [Prerequisites](#prerequisites)) when building:
 
 ```bash
-cargo +<channel-from-rust-toolchain> install --git https://github.com/Tollcraft/soroban-cost-linter.git cargo-cost-lint
+cargo +<channel-from-rust-toolchain> install --git https://github.com/chindadi/stellar-auditor.git cargo-cost-lint
 ```
 
 > **Why is the nightly required?** The lint library links against `rustc_private`, which is only available on nightly compilers. A different nightly version may produce linker errors due to ABI mismatches.
@@ -124,7 +121,7 @@ If the binary was not tampered with the output will say `cargo-cost-lint: OK`.
 2. Install the linter using the pinned nightly:
 
    ```bash
-   cargo +<channel-from-rust-toolchain> install --git https://github.com/Tollcraft/soroban-cost-linter.git cargo-cost-lint
+   cargo +<channel-from-rust-toolchain> install --git https://github.com/chindadi/stellar-auditor.git cargo-cost-lint
    ```
 3. Run it on your Soroban project:
 
@@ -342,12 +339,11 @@ Join the discussion on our [Discord](https://discord.gg/5aprtMSyR).
 
 | Name | Role | Contact |
 |---|---|---|
-| [mallison031](https://github.com/mallison031) | Maintainer | [GitHub](https://github.com/mallison031) |
-| Tollcraft Team | Core Maintainers | [Tollcraft on Telegram](https://t.me/+Gflo5jZStw1jMjE0) |
+| Maintainer | chindadi | [GitHub](https://github.com/chindadi) |
 
 ## Contributors
 
-[![Contributors](https://contrib.rocks/image?repo=Tollcraft/soroban-cost-linter)](https://github.com/Tollcraft/soroban-cost-linter/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=chindadi/stellar-auditor)](https://github.com/chindadi/stellar-auditor/graphs/contributors)
 
 
 <!-- [`soroban-budget-assert`](https://github.com/Tollcraft/soroban-budget-assert). -->
@@ -359,6 +355,6 @@ Fixing issue 463
 A pre-built development container image containing the pinned nightly Rust toolchain, `cargo-dylint`, and `dylint-link` is published automatically for this project.
 You can pull it from the GitHub Container Registry:
 ```bash
-docker pull ghcr.io/tollcraft/soroban-cost-linter-dev:latest
+docker pull ghcr.io/chindadi/stellar-auditor-dev:latest
 ```
 This image does NOT contain the linter itself; it is an environment for building and testing the linter. Mount your source code into `/workspace` to use it.
