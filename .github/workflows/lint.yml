@@ -28,7 +28,7 @@ jobs:
         if: runner.os == 'Windows'
         run: .\.github\scripts\validate-toolchain-pins.ps1
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de # v1
+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # v1
         with:
           toolchain: nightly-2026-04-16
           components: rustc-dev, llvm-tools-preview, rustfmt, clippy
@@ -97,7 +97,7 @@ jobs:
       - name: Validate toolchain pins (Linux)
         run: bash .github/scripts/validate-toolchain-pins.sh
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de # v1
+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # v1
         with:
           toolchain: nightly-2026-04-16
           components: rustc-dev, llvm-tools-preview, rustfmt, clippy
@@ -133,7 +133,7 @@ jobs:
       - name: Validate toolchain pins (Linux)
         run: bash .github/scripts/validate-toolchain-pins.sh
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de # v1
+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # v1
         with:
           toolchain: nightly-2026-04-16
           components: rustc-dev, llvm-tools-preview, rustfmt, clippy
